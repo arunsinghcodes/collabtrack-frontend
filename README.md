@@ -1,36 +1,261 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🚀 CollabTrack Frontend
 
-## Getting Started
+Frontend application for **CollabTrack** — a Jira‑like project management system.
 
-First, run the development server:
+This project is built using modern frontend architecture with **Next.js App Router**, **Tailwind CSS v4**, and **shadcn/ui**, designed to integrate seamlessly with the CollabTrack Backend REST APIs.
+
+---
+
+## 📌 Project Overview
+
+**CollabTrack** is a collaborative project and task management platform that allows teams to:
+
+- Create and manage projects
+- Assign tasks and subtasks
+- Track progress across teams
+- Manage roles and permissions
+- Collaborate efficiently like Jira
+
+This repository contains the **frontend application only**.
+
+---
+
+## 🧱 Tech Stack
+
+| Category         | Technology               |
+| ---------------- | ------------------------ |
+| Framework        | Next.js 14+ (App Router) |
+| Language         | JavaScript (ES6+)        |
+| Styling          | Tailwind CSS v4          |
+| UI Components    | shadcn/ui                |
+| State Management | Zustand (client state)   |
+| Server State     | TanStack React Query     |
+| HTTP Client      | Axios                    |
+| Routing          | Next.js App Router       |
+| Authentication   | JWT (httpOnly cookies)   |
+| Deployment       | Vercel (recommended)     |
+
+---
+
+## 📂 Folder Structure
+
+```
+collabtrack-frontend/
+├── src/
+│   ├── app/
+│   │   ├── (auth)/            # Public routes
+│   │   │   ├── login/
+│   │   │   └── register/
+│   │   │
+│   │   ├── (dashboard)/       # Protected routes
+│   │   │   ├── dashboard/
+│   │   │   ├── projects/
+│   │   │   ├── tasks/
+│   │   │   └── layout.js
+│   │   │
+│   │   └── layout.js
+│   │
+│   ├── components/
+│   │   ├── layout/            # Sidebar, Navbar
+│   │   └── ui/                # shadcn components
+│   │
+│   ├── lib/                   # axios, utils, query client
+│   ├── services/              # API services
+│   ├── stores/                # Zustand stores
+│   └── hooks/                 # Custom React Query hooks
+│
+├── public/
+├── components.json            # shadcn config
+├── tailwind.config.js
+├── postcss.config.mjs
+└── README.md
+```
+
+---
+
+## 🌐 Backend Integration
+
+The frontend consumes REST APIs from the CollabTrack backend.
+
+**Backend URL:**
+
+```
+https://collabtrack-api.onrender.com
+```
+
+**Base API Path:**
+
+```
+/api/v1
+```
+
+### Example:
+
+```
+POST /api/v1/auth/login
+GET  /api/v1/projects
+GET  /api/v1/tasks/:projectId
+```
+
+---
+
+## 🔐 Authentication Flow
+
+- User logs in via backend API
+- Backend sets **httpOnly JWT cookies**
+- Frontend never stores tokens in localStorage
+- Session is validated via `/auth/current-user`
+- Protected routes handled using Next.js middleware
+
+```
+Login → Cookie Set → Middleware Check → Dashboard
+```
+
+---
+
+## 🧠 State Management Strategy
+
+### ✅ Server State
+
+Handled using **TanStack React Query**:
+
+- Projects
+- Tasks
+- Subtasks
+- Notes
+- Members
+
+Features:
+
+- caching
+- background refetch
+- retries
+- pagination
+
+---
+
+### ✅ Client State
+
+Handled using **Zustand**:
+
+- authenticated user
+- role
+- sidebar open/close
+- selected project
+
+---
+
+## 🎨 UI System
+
+### Tailwind CSS v4
+
+- utility‑first styling
+- no component layer
+- fast compilation
+
+### shadcn/ui
+
+- accessible components
+- fully customizable
+- Tailwind‑based
+- no runtime dependency
+
+Components used:
+
+- Button
+- Card
+- Input
+- Table
+- Dialog
+- Dropdown Menu
+- Toast
+- Badge
+
+---
+
+## 📊 Dashboard Features (Planned)
+
+- Summary cards
+- Assigned tasks
+- Project overview
+- Role‑based visibility
+
+---
+
+## 🧪 Development Setup
+
+### 1️⃣ Install dependencies
+
+```bash
+npm install
+```
+
+---
+
+### 2️⃣ Environment variables
+
+Create `.env.local`:
+
+```env
+NEXT_PUBLIC_API_URL=https://collabtrack-api.onrender.com/api/v1
+```
+
+---
+
+### 3️⃣ Run development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🚀 Deployment
 
-To learn more about Next.js, take a look at the following resources:
+Recommended platform:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Vercel** (best with Next.js)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Steps:
 
-## Deploy on Vercel
+1. Push code to GitHub
+2. Import repository in Vercel
+3. Add environment variables
+4. Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔮 Future Enhancements
+
+- Role‑based UI permissions
+- Realtime updates (WebSockets)
+- Drag & drop Kanban board
+- File uploads
+- Activity logs
+- Notifications
+- Dark mode
+
+---
+
+## 👨‍💻 Author
+
+**Arun Kumar Singh**
+Frontend Engineer | Full‑Stack Developer
+
+---
+
+## 📄 License
+
+This project is for **learning and portfolio purposes**.
+
+---
+
+### ⭐ If you like this project, give it a star!
+
+Happy coding 🚀
