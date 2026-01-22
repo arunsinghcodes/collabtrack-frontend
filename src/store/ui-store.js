@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export const useUIStore = create((set) => ({
+export const useUIStore = create((set, get) => ({
   collapsed: false,
   sidebarOpen: false,
   hydrated: false,
@@ -18,18 +18,8 @@ export const useUIStore = create((set) => ({
   hydrate: () => {
     const saved = localStorage.getItem("sidebar-collapsed");
 
-    if (saved !== null) {
-      set({
-        collapsed: saved === "true",
-        hydrated: true,
-      });
-      return;
-    }
-
-    const isMobile = window.innerWidth < 1024;
-
     set({
-      collapsed: isMobile,
+      collapsed: saved === "true",
       hydrated: true,
     });
   },
