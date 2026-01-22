@@ -1,3 +1,3 @@
 export default function LoginPage() {
-  return <div className="bg-white p-8 rounded-lg">Login Page</div>;
+  return <div className="bg-card p-8 rounded-lg">Login Page</div>;
 }
