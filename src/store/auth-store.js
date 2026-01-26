@@ -7,9 +7,7 @@ export const useAuthStore = create((set) => ({
 
   fetchUser: async () => {
     try {
-      const res = await apiFetch(
-        "/api/v1/auth/current-user"
-      );
+      const res = await apiFetch("/api/v1/auth/current-user");
 
       if (!res.ok) throw new Error();
 
@@ -21,20 +19,19 @@ export const useAuthStore = create((set) => ({
   },
 
   login: async (payload) => {
-    const res = await apiFetch(
-      "/api/v1/auth/login",
-      {
-        method: "POST",
-        body: JSON.stringify(payload),
-      }
-    );
+    const res = await apiFetch("/api/v1/auth/login", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
 
     if (!res.ok) {
       const err = await res.json();
       throw err;
     }
 
-    await apiFetch("/api/v1/auth/current-user");
+    apiFetch("/api/v1/auth/current-user", {
+      method: "POST",
+    });
   },
 
   logout: async () => {
