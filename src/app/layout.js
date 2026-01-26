@@ -1,6 +1,7 @@
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import "./globals.css";
 import KeyboardShortcuts from "@/components/providers/keyboard-shortcuts";
+import "@/lib/axios-interceptor";
 
 export const metadata = {
   title: "CollabTrack",

@@ -30,7 +30,7 @@ export const useAuthStore = create((set) => ({
     }
 
     apiFetch("/api/v1/auth/current-user", {
-      method: "POST",
+      method: "GET",
     });
   },
 

@@ -1,57 +1,51 @@
 "use client";
 
 import { useState } from "react";
+import { loginApi } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/store/auth-store";
 
 export default function LoginPage() {
-  const login = useAuthStore((s) => s.login);
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
-
-  const submit = async (e) => {
-    e.preventDefault();
-
+  const handleLogin = async () => {
     try {
-      await login(form);
+      const res = await loginApi({ email, password });
+
+      localStorage.setItem("accessToken", res.data.data.accessToken);
+
       router.push("/dashboard");
     } catch (err) {
-      alert(err.message || "Login failed");
+      alert("Invalid credentials");
     }
   };
 
   return (
-    <form onSubmit={submit} className="mx-auto mt-32 max-w-sm space-y-4">
-      <h1 className="text-2xl font-bold">Login</h1>
+    <div className="flex h-screen items-center justify-center">
+      <div className="w-80 space-y-4">
+        <input
+          placeholder="Email"
+          className="w-full border p-2"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-      <input
-        placeholder="Email"
-        className="w-full border p-2"
-        onChange={(e) =>
-          setForm({
-            ...form,
-            email: e.target.value,
-          })
-        }
-      />
+        <input
+          type="password"
+          placeholder="Password"
+          className="w-full border p-2"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      <input
-        type="password"
-        placeholder="Password"
-        className="w-full border p-2"
-        onChange={(e) =>
-          setForm({
-            ...form,
-            password: e.target.value,
-          })
-        }
-      />
-
-      <button className="w-full bg-black text-white p-2">Login</button>
-    </form>
+        <button
+          onClick={handleLogin}
+          className="w-full bg-black text-white p-2"
+        >
+          Login
+        </button>
+      </div>
+    </div>
   );
 }
