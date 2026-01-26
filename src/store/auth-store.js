@@ -1,44 +1,50 @@
 import { create } from "zustand";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 
 export const useAuthStore = create((set) => ({
   user: null,
   loading: true,
 
+  setLoading: (value) => set({ loading: value }),
+
   fetchUser: async () => {
     try {
-      const res = await apiFetch("/api/v1/auth/current-user");
+      const res = await api.post("/auth/current-user");
 
-      if (!res.ok) throw new Error();
-
-      const data = await res.json();
-      set({ user: data.data, loading: false });
+      set({
+        user: res.data.data,
+        loading: false,
+      });
     } catch {
-      set({ user: null, loading: false });
+      set({
+        user: null,
+        loading: false,
+      });
     }
   },
 
   login: async (payload) => {
-    const res = await apiFetch("/api/v1/auth/login", {
-      method: "POST",
-      body: JSON.stringify(payload),
-    });
+    const res = await api.post("/auth/login", payload);
 
-    if (!res.ok) {
-      const err = await res.json();
-      throw err;
-    }
+    const accessToken = res.data.data.accessToken;
 
-    apiFetch("/api/v1/auth/current-user", {
-      method: "GET",
+    localStorage.setItem("accessToken", accessToken);
+
+    const userRes = await api.post("/auth/current-user");
+
+    set({
+      user: userRes.data.data,
+      loading: false,
     });
   },
 
   logout: async () => {
-    await apiFetch("/api/v1/auth/logout", {
-      method: "POST",
-    });
+    await api.post("/auth/logout");
+    localStorage.removeItem("accessToken");
 
-    set({ user: null });
+    set({
+      user: null,
+      loading: false,
+    });
   },
 }));

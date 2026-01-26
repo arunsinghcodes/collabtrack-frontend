@@ -7,18 +7,28 @@ import Sidebar from "@/components/layout/sidebar";
 import Navbar from "@/components/layout/navbar";
 
 export default function DashboardLayout({ children }) {
-  const { user, loading, fetchUser } = useAuthStore();
   const router = useRouter();
 
+  const user = useAuthStore((s) => s.user);
+  const loading = useAuthStore((s) => s.loading);
+  const fetchUser = useAuthStore((s) => s.fetchUser);
+  const setLoading = useAuthStore((s) => s.setLoading);
+
   useEffect(() => {
-    fetchUser();
-  }, []);
+    const token = localStorage.getItem("accessToken");
+
+    if (token) {
+      fetchUser();
+    } else {
+      setLoading(false);
+    }
+  }, []); // ✅ run only once
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push("./login");
+      router.replace("/login");
     }
-  }, [loading, user]);
+  }, [loading, user, router]);
 
   if (loading) return null;
 
