@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginApi } from "@/services/auth.service";
-import { Loader2, LogIn } from "lucide-react";
+import { Loader2, LogIn, Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -12,6 +12,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -74,17 +75,37 @@ export default function LoginPage() {
 
         <div>
           <label className="text-sm font-medium">Password</label>
-          <input
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="
-              mt-1 w-full rounded-md border bg-background px-3 py-2
-              text-sm outline-none
-              focus:border-primary focus:ring-1 focus:ring-primary
-            "
-          />
+
+          <div className="relative mt-1">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="
+        w-full rounded-md border bg-background
+        px-3 py-2 pr-10
+        text-sm outline-none
+        focus:border-primary focus:ring-1 focus:ring-primary
+      "
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="
+        absolute right-2 top-1/2 -translate-y-1/2
+        text-muted-foreground
+        hover:text-foreground
+      "
+            >
+              {showPassword ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
+            </button>
+          </div>
         </div>
 
         {error && <p className="text-sm text-destructive">{error}</p>}
