@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginApi } from "@/services/auth.service";
 import { Loader2, LogIn, Eye, EyeOff } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -37,7 +38,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.45,
+        ease: "easeOut",
+      }}
       className="
         w-[380px]
         rounded-xl
@@ -134,6 +141,6 @@ export default function LoginPage() {
       <div className="mt-6 text-center text-xs text-muted-foreground">
         © {new Date().getFullYear()} CollabTrack
       </div>
-    </div>
+    </motion.div>
   );
 }
