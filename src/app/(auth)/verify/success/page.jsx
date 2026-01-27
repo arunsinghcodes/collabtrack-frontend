@@ -59,6 +59,10 @@ export default function VerifySuccessPage() {
           Go to login
           <ArrowRight className="h-4 w-4" />
         </Link>
+        {/* footer */}
+        <p className="mt-6 text-center text-xs text-muted-foreground">
+          You may now close this tab safely.
+        </p>
       </motion.div>
     </div>
   );
