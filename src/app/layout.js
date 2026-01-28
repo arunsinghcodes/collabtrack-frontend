@@ -1,8 +1,7 @@
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import "./globals.css";
 import KeyboardShortcuts from "@/components/providers/keyboard-shortcuts";
-import "@/lib/axios-interceptor";
-import AxiosProvider from "@/components/providers/axios-provider";
+import AuthProvider from "@/components/providers/auth-provider";
 
 export const metadata = {
   title: "CollabTrack",
@@ -14,9 +13,8 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <AxiosProvider />
           <KeyboardShortcuts />
-          {children}
+          <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
       </body>
     </html>

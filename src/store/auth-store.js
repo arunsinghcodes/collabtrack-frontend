@@ -5,8 +5,6 @@ export const useAuthStore = create((set) => ({
   user: null,
   loading: true,
 
-  setLoading: (value) => set({ loading: value }),
-
   fetchUser: async () => {
     try {
       const res = await api.post("/auth/current-user");
@@ -24,11 +22,7 @@ export const useAuthStore = create((set) => ({
   },
 
   login: async (payload) => {
-    const res = await api.post("/auth/login", payload);
-
-    const accessToken = res.data.data.accessToken;
-
-    localStorage.setItem("accessToken", accessToken);
+    await api.post("/auth/login", payload);
 
     const userRes = await api.post("/auth/current-user");
 
@@ -38,24 +32,12 @@ export const useAuthStore = create((set) => ({
     });
   },
 
-  // logout: async () => {
-  //   await api.post("/auth/logout");
-  //   localStorage.removeItem("accessToken");
-
-  //   set({
-  //     user: null,
-  //     loading: false,
-  //   });
-  // },
-
   logout: async () => {
     try {
       await api.post("/auth/logout");
     } catch (e) {
       // ignore backend failure
     }
-
-    localStorage.removeItem("accessToken");
 
     set({
       user: null,
