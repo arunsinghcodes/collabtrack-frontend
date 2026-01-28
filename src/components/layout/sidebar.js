@@ -15,6 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/store/ui-store";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { useAuthStore } from "@/store/auth-store";
 
 const navItems = [
   { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -25,6 +26,8 @@ const navItems = [
 export default function Sidebar() {
   const pathname = usePathname();
   const isDesktop = useMediaQuery("(min-width: 1024px)");
+
+  const logout = useAuthStore((s) => s.logout);
 
   const {
     collapsed,
@@ -117,7 +120,10 @@ export default function Sidebar() {
             {!effectiveCollapsed && "Settings"}
           </Link>
 
-          <button className="flex w-full items-center gap-3 px-3 py-2 rounded-lg text-destructive hover:bg-destructive/10">
+          <button
+            onClick={logout}
+            className="flex w-full items-center gap-3 px-3 py-2 rounded-lg text-destructive hover:bg-destructive/10"
+          >
             <LogOut className="h-4 w-4" />
             {!effectiveCollapsed && "Logout"}
           </button>
