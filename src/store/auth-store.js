@@ -38,13 +38,30 @@ export const useAuthStore = create((set) => ({
     });
   },
 
+  // logout: async () => {
+  //   await api.post("/auth/logout");
+  //   localStorage.removeItem("accessToken");
+
+  //   set({
+  //     user: null,
+  //     loading: false,
+  //   });
+  // },
+
   logout: async () => {
-    await api.post("/auth/logout");
+    try {
+      await api.post("/auth/logout");
+    } catch (e) {
+      // ignore backend failure
+    }
+
     localStorage.removeItem("accessToken");
 
     set({
       user: null,
       loading: false,
     });
+
+    window.location.href = "/login";
   },
 }));
