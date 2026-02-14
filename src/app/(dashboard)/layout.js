@@ -10,20 +10,11 @@ import EmailVerificationBanner from "@/components/auth/email-verification-banner
 export default function DashboardLayout({ children }) {
   const router = useRouter();
 
-  const user = useAuthStore((s) => s.user);
-  const loading = useAuthStore((s) => s.loading);
-  const fetchUser = useAuthStore((s) => s.fetchUser);
-  const setLoading = useAuthStore((s) => s.setLoading);
+  const { user, loading, fetchUser } = useAuthStore();
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-
-    if (token) {
-      fetchUser();
-    } else {
-      setLoading(false);
-    }
-  }, []); // ✅ run only once
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -31,12 +22,15 @@ export default function DashboardLayout({ children }) {
     }
   }, [loading, user, router]);
 
-  if (loading) return null;
+  if (loading) {
+    return null; // or full screen loader
+  }
+
+  if (!user) return null;
 
   return (
     <div className="flex h-screen">
       <Sidebar />
-
       <div className="flex flex-col flex-1">
         <EmailVerificationBanner user={user} />
         <Navbar />

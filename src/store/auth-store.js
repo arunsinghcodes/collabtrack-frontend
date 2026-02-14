@@ -1,35 +1,35 @@
 import { create } from "zustand";
 import { api } from "@/lib/api";
 
-export const useAuthStore = create((set) => ({
+export const useAuthStore = create((set, get) => ({
   user: null,
   loading: true,
 
   fetchUser: async () => {
+    if (get().user) return; // prevent duplicate calls
+
     try {
       const res = await api.post("/auth/current-user");
-
-      set({
-        user: res.data.data,
-        loading: false,
-      });
+      set({ user: res.data.data, loading: false });
     } catch {
-      set({
-        user: null,
-        loading: false,
-      });
+      set({ user: null, loading: false });
     }
   },
 
   login: async (payload) => {
-    await api.post("/auth/login", payload);
+    try {
+      await api.post("/auth/login", payload);
+      const userRes = await api.post("/auth/current-user");
 
-    const userRes = await api.post("/auth/current-user");
+      set({
+        user: userRes.data.data,
+        loading: false,
+      });
 
-    set({
-      user: userRes.data.data,
-      loading: false,
-    });
+      return true;
+    } catch {
+      return false;
+    }
   },
 
   logout: async () => {

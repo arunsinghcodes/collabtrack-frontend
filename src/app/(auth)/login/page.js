@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { loginApi } from "@/services/auth.service";
 import { Loader2, LogIn, Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
+import { useAuthStore } from "@/store/auth-store";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -14,6 +15,8 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const login = useAuthStore((s) => s.login);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -25,13 +28,13 @@ export default function LoginPage() {
       setLoading(true);
       setError("");
 
-      const res = await loginApi({ email, password });
+      const success = await login({ email, password });
 
-      localStorage.setItem("accessToken", res.data.data.accessToken);
-
-      router.push("/dashboard");
-    } catch (err) {
-      setError("Invalid email or password");
+      if (success) {
+        router.replace("/dashboard");
+      } else {
+        setError("Invalid email or password");
+      }
     } finally {
       setLoading(false);
     }
