@@ -6,7 +6,7 @@ export const useAuthStore = create((set, get) => ({
   loading: true,
 
   fetchUser: async () => {
-    if (get().user) return; // prevent duplicate calls
+    if (get().loading === false && get().user) return;
 
     try {
       const res = await api.post("/auth/current-user");
